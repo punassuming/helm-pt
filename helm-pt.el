@@ -33,27 +33,27 @@
 (require 'helm)
 
 (defgroup helm-pt nil
-  "the platinum searcher interface for helm"
+  "the platinum searcher interface for helm."
   :group 'helm)
 
 (defcustom helm-pt-command "pt"
-  "Default executable for platinum searcher"
+  "Default executable for platinum searcher."
   :type 'string
   :group 'helm-pt)
 
 (defcustom helm-pt-args '("--smart-case")
-  "User arguments"
+  "User arguments."
   :type 'list
   :group 'helm-pt)
 
 (defcustom helm-pt-ignore-arguments '("archive-contents")
-  "List of default patterns to ignore"
+  "List of default patterns to ignore."
   :type 'list
   :group 'helm-pt)
 
 (defcustom helm-pt-insert-at-point t
   "Insert thing at point as search pattern.
-   You can set value same as `thing-at-point'"
+You can set value same as `thing-at-point'."
   :type 'boolean
   :group 'helm-pt)
 
@@ -62,7 +62,7 @@
 (defvar helm-pt-split-line-regexp "^\\([[:lower:][:upper:]]?:?.*?\\):\\([0-9]+\\):\\(.*\\)")
 
 (defvar helm-source-pt nil
-  "Source to scan directory tree with the platinum searcher")
+  "Source to scan directory tree with the platinum searcher.")
 
 (setq helm-source-pt
       (helm-build-async-source
@@ -106,6 +106,7 @@
   "Keymap for `helm-do-pt'.")
 
 (defun helm-pt--process ()
+  "Launch async process to supply candidates."
   (let (
         (debug-on-error t)
         (cmd-line (helm-pt--command helm-pattern)))
@@ -236,7 +237,7 @@
   candidate)
 
 (defun helm-do-pt (&optional basedir)
-  "helm source for platinum searcher."
+  "Helm source for platinum searcher."
   (interactive)
   (unless (executable-find "pt")
     (error "pt not available"))
@@ -252,7 +253,7 @@
    :truncate-lines t))
 
 (defun helm-projectile-pt ()
-  "helm version of projectile-pt."
+  "Helm version of projectile-pt."
   (interactive)
   (require 'projectile)
   (unless (fboundp 'projectile-project-root)
