@@ -4,8 +4,7 @@
 
 ;; Author: Rich Alesi
 ;; URL: https://github.com/ralesi/helm-pt
-;; Version: 2015
-;; X-Original-Version: 0.11
+;; Version: 20150307.141210
 ;; Package-Requires: ((helm "1.5.6"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -46,15 +45,15 @@
   :type 'list
   :group 'helm-pt)
 
-(defcustom helm-pt-ignore-arguments nil
-  "Default patterns to ignore"
-  :type 'boolean
+(defcustom helm-pt-ignore-arguments '("archive-contents")
+  "List of default patterns to ignore"
+  :type 'list
   :group 'helm-pt)
 
 (defcustom helm-pt-insert-at-point t
   "Insert thing at point as search pattern.
    You can set value same as `thing-at-point'"
-  :type 'symbol
+  :type 'boolean
   :group 'helm-pt)
 
 (defvar helm-pt-default-directory nil)
@@ -85,12 +84,15 @@
 
 (defun helm-pt--command (pattern &optional)
   (let ((debug-on-error t)
+        (ignore-args
+         (mapcar (lambda (val) (concat "--ignore=" val))
+                 helm-pt-ignore-arguments))
         (default-directory (or helm-pt-default-directory
                                helm-default-directory)))
     (mapconcat 'identity
                (append (list  helm-pt-command)
                        helm-pt-args
-                       helm-pt-ignore-arguments
+                       ignore-args
                        '("-e" "--nogroup" "--nocolor" "--")
                        (list (shell-quote-argument (string-join (split-string pattern) ".*")))
                        (list (shell-quote-argument default-directory))) " ")))
@@ -114,6 +116,7 @@
       (set-process-sentinel
        (get-buffer-process helm-buffer)
        #'(lambda (process event)
+           ;; need to FIX this and actually recognize exit-code
            (let ((noresult (= (process-exit-status process) 2)))
              (unless noresult
                (helm-process-deferred-sentinel-hook
@@ -254,13 +257,12 @@
   (unless (fboundp 'projectile-project-root)
     (error "not in a project"))
   (let ((helm-pt-ignore-arguments
-         (mapcar (lambda (val) (concat "--ignore=" val))
-                 (append projectile-globally-ignored-files
-                         projectile-globally-ignored-directories
-                         (projectile-project-ignored)
-                         ))))
+         (append helm-pt-ignore-arguments
+                 projectile-globally-ignored-files
+                 projectile-globally-ignored-directories
+                 (projectile-project-ignored))))
     (helm-do-pt (projectile-project-root))))
 
-(helm-do-pt)
-
 (provide 'helm-pt)
+
+;;; helm-pt.el ends here
