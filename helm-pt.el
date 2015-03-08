@@ -5,7 +5,7 @@
 ;; Author: Rich Alesi
 ;; URL: https://github.com/ralesi/helm-pt
 ;; Version: 20150307.141210
-;; Package-Requires: ((helm "1.5.6"))
+;; Package-Requires: ((helm "1.5.6") (cl-lib "0.5"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@
 
 ;;; Code:
 
+(require 'cl-lib)
 (require 'helm)
 
 (defgroup helm-pt nil
@@ -66,7 +67,7 @@ You can set value same as `thing-at-point'."
 
 (setq helm-source-pt
       (helm-build-async-source
-          "Platinum Searcher" 
+          "Platinum Searcher"
         ;; :mode-line (helm-pt-unique-path (or helm-pt-default-directory default-directory))
         :header-name (lambda (name)
                        (concat name))
@@ -107,8 +108,7 @@ You can set value same as `thing-at-point'."
 
 (defun helm-pt--process ()
   "Launch async process to supply candidates."
-  (let (
-        (debug-on-error t)
+  (let ((debug-on-error t)
         (cmd-line (helm-pt--command helm-pattern)))
     ;; Start pt process.
     (prog1            ; This function should return the process first.
@@ -142,14 +142,14 @@ You can set value same as `thing-at-point'."
   (let* ((listl (split-string path "/" t))
          (lastl (car (last listl)))
          (butl (butlast listl)))
-     (concat 
-      (string-join  (loop for paths in 
-                          butl 
-                          collect
-                          (downcase (subseq paths 0 1))
-                          ) "/")
-      "/"
-      lastl)))
+    (concat
+     (string-join (cl-loop for paths in
+                           butl
+                           collect
+                           (downcase (subseq paths 0 1))
+                           ) "/")
+     "/"
+     lastl)))
 
 (defun helm-pt--persistent-action (candidate)
   (helm-pt-action candidate)
@@ -236,6 +236,7 @@ You can set value same as `thing-at-point'."
       (setq last-pos (1+ (match-end 0)))))
   candidate)
 
+;;;###autoload
 (defun helm-do-pt (&optional basedir)
   "Helm source for platinum searcher."
   (interactive)
@@ -252,6 +253,7 @@ You can set value same as `thing-at-point'."
               (thing-at-point 'symbol)))
    :truncate-lines t))
 
+;;;###autoload
 (defun helm-projectile-pt ()
   "Helm version of projectile-pt."
   (interactive)
