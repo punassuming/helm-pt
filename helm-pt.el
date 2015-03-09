@@ -84,9 +84,8 @@ You can set value same as `thing-at-point'."
         :requires-pattern 3
         ))
 
-(defun helm-pt--command (pattern &optional)
-  (let ((debug-on-error t)
-        (ignore-args
+(defun helm-pt--command (pattern)
+  (let ((ignore-args
          (mapcar (lambda (val) (concat "--ignore=" val))
                  helm-pt-ignore-arguments))
         (default-directory (or helm-pt-default-directory
@@ -172,8 +171,7 @@ You can set value same as `thing-at-point'."
     ))
 
 (defun helm-pt--candidate-transformer (candidate)
-  (let* ((debug-on-error t)
-         (root   (lambda () (or helm-ff-default-directory
+  (let* ((root   (lambda () (or helm-ff-default-directory
                                 helm-default-directory
                                 default-directory)))
          (split (helm-pt-split-line candidate))
