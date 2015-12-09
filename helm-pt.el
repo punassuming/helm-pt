@@ -5,7 +5,7 @@
 ;; Author: Rich Alesi
 ;; URL: https://github.com/ralesi/helm-pt
 ;; Version: 20150307.141210
-;; Package-Requires: ((helm "1.5.6") (cl-lib "0.5"))
+;; Package-Requires: ((helm "1.5.6") (cl-lib "0.5") (emacs "24.4"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -32,6 +32,7 @@
 
 (require 'cl-lib)
 (require 'helm)
+(require 'subr-x)
 
 (defgroup helm-pt nil
   "the platinum searcher interface for helm."
