@@ -89,7 +89,7 @@ You can set value same as `thing-at-point'."
          (mapcar (lambda (val) (concat "--ignore=" val))
                  helm-pt-ignore-arguments))
         (default-directory (or helm-pt-default-directory
-                               helm-default-directory)))
+                               (helm-default-directory))))
     (mapconcat 'identity
                (append (list  helm-pt-command)
                        helm-pt-args
@@ -172,7 +172,7 @@ You can set value same as `thing-at-point'."
 
 (defun helm-pt--candidate-transformer (candidate)
   (let* ((root   (lambda () (or helm-ff-default-directory
-                                helm-default-directory
+                                (helm-default-directory)
                                 default-directory)))
          (split (helm-pt-split-line candidate))
          (fname  (if (and root split)
@@ -199,7 +199,7 @@ You can set value same as `thing-at-point'."
   "`filter-one-by-one' transformer function for `helm-do-pt'."
   (let* ((root (or helm-pt-default-directory
                    helm-ff-default-directory
-                   helm-default-directory
+                   (helm-default-directory)
                    default-directory
                    ))
          (split (helm-pt-split-line candidate))
