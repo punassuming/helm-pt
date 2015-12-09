@@ -32,6 +32,8 @@
 
 (require 'cl-lib)
 (require 'helm)
+(require 'helm-utils)
+(require 'helm-files)
 (require 'subr-x)
 
 (defgroup helm-pt nil
