@@ -145,7 +145,7 @@ You can set value same as `thing-at-point'."
      (string-join (cl-loop for paths in
                            butl
                            collect
-                           (downcase (subseq paths 0 1))
+                           (downcase (cl-subseq paths 0 1))
                            ) "/")
      "/"
      lastl)))
